@@ -52,7 +52,7 @@ function __kubernetes_status
     return
   end
 
-  set -l ns (kubectl config get-context | grep \* | awk '{print $5}')
+  set -l ns (kubectl config get-contexts | grep \* | awk '{print $5}')
   [ -z $ns ]; and set -l ns 'default'
 
   echo -n (set_color cyan)$KUBECTL_PROMPT_ICON" "(set_color white)"($ctx$KUBECTL_PROMPT_SEPARATOR$ns)"
