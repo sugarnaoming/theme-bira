@@ -46,15 +46,14 @@ function __kubernetes_status
     return
   end
 
-  set -l ctx (kubectl config current-context 2>/dev/null)
-  if [ $status -ne 0 ]
+  set -l cc (kubectl config get-contexts | grep \* 2>/dev/null)
+  kubectl config get-contexts | grep \* | awk '{print $2, $5}' | read ctx ns
+  if [ -z $ctx ]
     echo -n (set_color red)$KUBECTL_PROMPT_ICON" "(set_color white)"no context"
     return
   end
 
-  set -l ns (kubectl config get-contexts | grep \* | awk '{print $5}')
   [ -z $ns ]; and set -l ns 'default'
-
   echo -n (set_color cyan)$KUBECTL_PROMPT_ICON" "(set_color white)"($ctx$KUBECTL_PROMPT_SEPARATOR$ns)"
 end
 
