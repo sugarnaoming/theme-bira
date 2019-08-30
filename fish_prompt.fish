@@ -40,7 +40,6 @@ end
 function __kubernetes_status
   [ -z "$KUBECTL_PROMPT_ICON" ]; and set -l KUBECTL_PROMPT_ICON "⎈"
   [ -z "$KUBECTL_PROMPT_SEPARATOR" ]; and set -l KUBECTL_PROMPT_SEPARATOR "/"
-  set -l config $KUBECONFIG
   [ -z "$config" ]; and set -l config "$HOME/.kube/config"
   if [ ! -f $config ]
     echo -n (set_color red)$KUBECTL_PROMPT_ICON" "(set_color white)"no config"
@@ -53,7 +52,7 @@ function __kubernetes_status
     return
   end
 
-  set -l ns (kubectl config view -o "jsonpath={.contexts[?(@.name==\"$context\")].context.namespace}")
+  set -l ns (kubectl config get-context | grep \* | awk '{print $5}')
   [ -z $ns ]; and set -l ns 'default'
 
   echo -n (set_color cyan)$KUBECTL_PROMPT_ICON" "(set_color white)"($ctx$KUBECTL_PROMPT_SEPARATOR$ns)"
